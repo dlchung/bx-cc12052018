@@ -56,16 +56,23 @@ function setTrigger() {
 
     var modal = document.createElement("div");
     var modalStyle = modal.style;
+    var modalHeight = 400;
+    var modalWidth = 400;
     
     modal.className = "overlay-modal";
-    modalStyle.height = "400px";
-    modalStyle.margin = "0 auto";
-    modalStyle.width = "400px";
+    modalStyle.background = "#fff";
+    modalStyle.height = modalHeight + "px";
+    modalStyle.left = "50%";
+    modalStyle.position = "fixed";
+    modalStyle.top = "50%";
+    modalStyle.width = modalWidth + "px";
     modalStyle.zIndex = "101";
+    modalStyle.marginTop = "-" + (modalHeight / 2) + "px";
+    modalStyle.marginLeft = "-" + (modalWidth / 2) + "px";
 
     modal.innerText = "THIS IS THE MODAL";
 
-    overlayWrap.appendChild(modal);
+    document.body.appendChild(modal);
   }
 
 }
