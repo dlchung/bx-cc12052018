@@ -8,6 +8,7 @@ function getCartData() {
   for(i = 0; i < productDiv.length; i++) {
     var productObj = {
       name: productDiv.item(i).querySelector(".mini-cart-name a").innerText,
+      productUrl: productDiv.item(i).querySelector(".mini-cart-name a").href,
       imgUrl: productDiv.item(i).querySelector("img").src,
       quantity: productDiv.item(i).querySelector(".mini-cart-pricing .value").innerText,
       price: productDiv.item(i).querySelector(".mini-cart-price").innerText
@@ -42,6 +43,7 @@ function setTrigger() {
 
 function renderOverlay(clientHeight) {
   var dataObj = getCartData();
+  console.log(dataObj);
 
   var overlayWrap = document.createElement("div");
   var overlayStyle = overlayWrap.style;
@@ -52,7 +54,7 @@ function renderOverlay(clientHeight) {
   overlayStyle.height = clientHeight + "px";
   overlayStyle.left = "0";
   overlayStyle.opacity = "0.6";
-  overlayStyle.position = "absolute";
+  overlayStyle.position = "fixed";
   overlayStyle.top = "0";
   overlayStyle.width = "100vw";
   overlayStyle.zIndex = "100";
@@ -89,8 +91,8 @@ function renderOverlay(clientHeight) {
     dataObj.products.forEach(function(product) {
       prodResult += "<div class='overlay-product-wrap' style='display: table; border-collapse: collapse; font-family: ars_maquette_promedium, sans-serif; margin: 10px 0; padding: 10px; width: 100%;'>" +
         "<div style='display: table-row; width: 100%;'>" +
-          "<div class='overlay-product-img' style='vertical-align: middle; display: table-cell; width: 25%;'><img src='" + product.imgUrl + "' style='border solid 3px #ddd;' /></div>" +
-          "<div class='overlay-product-name' style='vertical-align: middle; display: table-cell; font-size: 18px;'><a href=''>" + product.name + "</a></div>" +
+          "<div class='overlay-product-img' style='vertical-align: middle; display: table-cell; width: 25%;'><a href='" + product.productUrl + "'><img src='" + product.imgUrl + "' style='border solid 3px #ddd;' /></a></div>" +
+          "<div class='overlay-product-name' style='vertical-align: middle; display: table-cell; font-size: 18px;'><a href='" + product.productUrl + "'>" + product.name + "</a></div>" +
           "<div class='overlay-product-quantity' style='vertical-align: middle; display: table-cell; font-size: 18px; width: 10%;'>" + product.quantity + "</div>" +
           "<div class='overlay-product-price' style='vertical-align: middle; display: table-cell; font-size: 18px; width: 15%;'>" + product.price + 
           "</div>" +
@@ -141,6 +143,7 @@ function showOverlay() {
   document.querySelector(".overlay-darken").style.display = "inline";
   document.querySelector(".overlay-modal").style.display = "inline";
 
+  // Dynamically adjust sizing and margins for overlay
   document.querySelector(".overlay-modal").style.marginTop = "-" + document.querySelector(".overlay-modal").clientHeight / 2 + "px";
   document.querySelector(".overlay-modal").style.marginLeft = "-" + document.querySelector(".overlay-modal").clientWidth / 2 + "px";
   document.querySelector(".overlay-product-list").style.height = document.querySelector(".overlay-modal").clientHeight / 1.5 + "px";
