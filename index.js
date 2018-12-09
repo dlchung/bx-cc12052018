@@ -11,7 +11,7 @@ function getCartData() {
   //   imageUrls.push(itemImages.item(i).querySelector("img").src);
   // }
   for(i = 0; i < productDiv.length; i++) {
-    console.log(productDiv.item(i).querySelector(".mini-cart-price").innerText);
+    // console.log(productDiv.item(i).querySelector(".mini-cart-price").innerText);
     var productObj = {
       name: productDiv.item(i).querySelector(".mini-cart-name a").innerText,
       imgUrl: productDiv.item(i).querySelector("img").src,
@@ -66,7 +66,6 @@ function setTrigger() {
 
 function renderOverlay(clientHeight) {
   var dataObj = getCartData();
-  console.log("logo", logo);
 
   var overlayWrap = document.createElement("div");
   var overlayStyle = overlayWrap.style;
@@ -86,9 +85,9 @@ function renderOverlay(clientHeight) {
 
   var modal = document.createElement("div");
   var modalStyle = modal.style;
-  var modalHeight = "500";
-  var modalWidth = "500";
-  var unit = "px";
+  var modalHeight = "50";
+  var modalWidth = "50";
+  var unit = "vh";
   
   modal.className = "overlay-modal";
   modalStyle.background = "#fff";
@@ -96,34 +95,38 @@ function renderOverlay(clientHeight) {
   modalStyle.borderRadius = "10px";
   modalStyle.boxSizing = "border-box";
   modalStyle.display = "none";
+  // modalStyle.height = modalHeight + unit;
   modalStyle.left = "50%";
-  modalStyle.height = modalHeight + unit;
-  modalStyle.width = modalWidth + unit;
+  modalStyle.maxHeight = "600px";
   modalStyle.padding = "10px";
   modalStyle.position = "fixed";
   modalStyle.top = "50%";
+  modalStyle.maxWidth = "600px";
+  modalStyle.width = modalWidth + unit;
   modalStyle.zIndex = "101";
   modalStyle.marginTop = "-" + (modalHeight / 2) + "px";
   modalStyle.marginLeft = "-" + (modalWidth / 2) + "px";
 
   var logo = "<img src='" + document.querySelector(".logo-image").src + "' style='float: left; width: 100px;' />";
 
-  var renderProduct = dataObj.products.map(function(product) {
-    // return "<img src='" + url + "'" +
-    //   "style='border: solid 2px #eee; margin: 5px;'" +
-    // " />";
-    return "<div class='overlay-product-wrap' style='display: table; border-collapse: collapse; font-family: ars_maquette_promedium, sans-serif; width: 100%;'>" +
-      "<div style='display: table-row; width: 100%;'>" +
-        "<div class='overlay-product-img' style='vertical-align: middle; display: table-cell; width: 25%;'><img src='" + product.imgUrl + "' style='border solid 3px #ddd;' /></div>" +
-        "<div class='overlay-product-name' style='vertical-align: middle; display: table-cell; font-size: 22px;'><a href=''>" + product.name + "</a></div>" +
-        "<div class='overlay-product-quantity' style='vertical-align: middle; display: table-cell; font-size: 22px; width: 10%;'>" + product.quantity + "</div>" +
-        "<div class='overlay-product-price' style='vertical-align: middle; display: table-cell; font-size: 22px; width: 15%;'>" + product.price + 
+  function renderProduct() {
+    var prodResult = ""
+    dataObj.products.forEach(function(product) {
+      prodResult += "<div class='overlay-product-wrap' style='display: table; border-collapse: collapse; font-family: ars_maquette_promedium, sans-serif; margin: 10px 0; width: 100%;'>" +
+        "<div style='display: table-row; width: 100%;'>" +
+          "<div class='overlay-product-img' style='vertical-align: middle; display: table-cell; width: 25%;'><img src='" + product.imgUrl + "' style='border solid 3px #ddd;' /></div>" +
+          "<div class='overlay-product-name' style='vertical-align: middle; display: table-cell; font-size: 18px;'><a href=''>" + product.name + "</a></div>" +
+          "<div class='overlay-product-quantity' style='vertical-align: middle; display: table-cell; font-size: 18px; width: 10%;'>" + product.quantity + "</div>" +
+          "<div class='overlay-product-price' style='vertical-align: middle; display: table-cell; font-size: 18px; width: 15%;'>" + product.price + 
+          "</div>" +
         "</div>" +
-      "</div>" +
-    "</div>";
-  });
+      "</div>";
+    });
 
-  var pStyle = "font-size: 1.3em; padding-bottom: 10px;";
+    return "<div class='overlay-product-list' style='clear: both; overflow: auto;'>" + prodResult + "</div>";
+  }
+
+  var pStyle = "font-size: 16px; padding-bottom: 10px;";
   var renderCartData = "<div class='overlay-cart-data' style='clear:both; font-family: ars_maquette_promedium, sans-serif;'>" +
     "<p class='overlay-data' style='" + pStyle + "'>You've reached the end! Would you like to checkout?</p>" +
     "<p class='overlay-data' style='" + pStyle + "'>You have " + dataObj.numItems + " products in your cart.</p>" +
@@ -135,7 +138,7 @@ function renderOverlay(clientHeight) {
     "class='overlay-close-btn'>X</a>" +
   "</div>";
 
-  var renderCartBtn = "<div>" +
+  var renderCartBtn = "<div style='padding: 5px 0; text-align: right;'>" +
     "<button class='overlay-cart-btn' style='background: #C62632; color: #fff; font-family: ars_maquette_probold,sans-serif; padding: 5px 10px; text-transform: uppercase;'>Go to Cart ></button>" +
   "</div>";
 
@@ -143,7 +146,7 @@ function renderOverlay(clientHeight) {
     logo +
     renderClose +
     renderCartData +
-    renderProduct +
+    renderProduct() +
     renderCartBtn
   );
 
@@ -161,6 +164,14 @@ function showOverlay() {
   overlayTriggered = true;
   document.querySelector(".overlay-darken").style.display = "inline";
   document.querySelector(".overlay-modal").style.display = "inline";
+
+  // console.log("clienheight", document.querySelector(".overlay-modal").clientHeight);
+  // console.log("-" + document.querySelector(".overlay-modal").clientHeight / 2 + "px");
+  document.querySelector(".overlay-modal").style.marginTop = "-" + document.querySelector(".overlay-modal").clientHeight / 2 + "px";
+  document.querySelector(".overlay-modal").style.marginLeft = "-" + document.querySelector(".overlay-modal").clientWidth / 2 + "px";
+  document.querySelector(".overlay-product-list").style.height = document.querySelector(".overlay-modal").clientHeight / 1.5 + "px";
+  // console.log(document.querySelector(".overlay-modal").marginTop)
+  // document.querySelector(".overlay-modal").clientHeight
 }
 
 var overlayTriggered = false;
