@@ -45,6 +45,7 @@ function renderOverlay(clientHeight) {
   var dataObj = getCartData();
   console.log(dataObj);
 
+  // Semi-transparent background for overlay
   var overlayWrap = document.createElement("div");
   var overlayStyle = overlayWrap.style;
   
@@ -61,6 +62,7 @@ function renderOverlay(clientHeight) {
 
   document.body.appendChild(overlayWrap);
 
+  // Modal creation and styling
   var modal = document.createElement("div");
   var modalStyle = modal.style;
   var modalHeight = "50";
@@ -91,10 +93,10 @@ function renderOverlay(clientHeight) {
     dataObj.products.forEach(function(product) {
       prodResult += "<div class='overlay-product-wrap' style='display: table; border-collapse: collapse; font-family: ars_maquette_promedium, sans-serif; margin: 10px 0; padding: 10px; width: 100%;'>" +
         "<div style='display: table-row; width: 100%;'>" +
-          "<div class='overlay-product-img' style='vertical-align: middle; display: table-cell; width: 25%;'><a href='" + product.productUrl + "'><img src='" + product.imgUrl + "' style='border solid 3px #ddd;' /></a></div>" +
+          "<div class='overlay-product-img' style='vertical-align: middle; display: table-cell; width: 25%;'><a href='" + product.productUrl + "'><img src='" + product.imgUrl + "' style='border: solid 1px #ddd;' /></a></div>" +
           "<div class='overlay-product-name' style='vertical-align: middle; display: table-cell; font-size: 18px;'><a href='" + product.productUrl + "'>" + product.name + "</a></div>" +
-          "<div class='overlay-product-quantity' style='vertical-align: middle; display: table-cell; font-size: 18px; width: 10%;'>" + product.quantity + "</div>" +
-          "<div class='overlay-product-price' style='vertical-align: middle; display: table-cell; font-size: 18px; width: 15%;'>" + product.price + 
+          "<div class='overlay-product-quantity' style='vertical-align: middle; display: table-cell; font-size: 18px; text-align: center; width: 10%;'>" + product.quantity + "</div>" +
+          "<div class='overlay-product-price' style='vertical-align: middle; display: table-cell; font-size: 18px; text-align: right; width: 15%;'>" + product.price + 
           "</div>" +
         "</div>" +
       "</div>";
@@ -107,7 +109,6 @@ function renderOverlay(clientHeight) {
   var renderCartData = "<div class='overlay-cart-data' style='clear:both; font-family: ars_maquette_promedium, sans-serif;'>" +
     "<p class='overlay-data' style='" + pStyle + "'>You've reached the end! Would you like to checkout?</p>" +
     "<p class='overlay-data' style='" + pStyle + "'>You have " + dataObj.numItems + " products in your cart.</p>" +
-    // "<p class='overlay-data' style='" + pStyle + "'>Total: " + dataObj.cartTotal + "</p>" +
   "</div>";
 
   var renderClose = "<div class='overlay-close-modal' style='color: #666; float:right; font-family: ars_maquette_promedium, sans-serif; font-size: 18px; font-weight: bold; padding-bottom: 10px; text-align: right;'>" + 
@@ -150,5 +151,7 @@ function showOverlay() {
 }
 
 var hasTriggered = false; // Triggered flag
-setTrigger();
-renderOverlay(document.body.clientHeight);
+if(!document.querySelector(".minicart-empty")) { // Set trigger when cart is not empty
+  setTrigger();
+  renderOverlay(document.body.clientHeight);
+}
